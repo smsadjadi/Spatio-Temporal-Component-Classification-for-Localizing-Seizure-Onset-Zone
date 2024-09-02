@@ -126,20 +126,21 @@ fi
 MNIhr2MNIlr="${DATASET}/${SUBJECT}/mnihr2mnilr.mat"
 POSTlr_DIR="${DATASET}/${SUBJECT}/post_t1/post_t1_normalized_lr"
 
-# Second STR MNI Lr to MNI Hr Transformation ========================================================================
-echo "Inversing transformations from MNI152 2mm to MNI152 1mm template..."
-if [ ! -f "${DATASET}/${SUBJECT}/mnilr2mnihr.mat" ]; then
-convert_xfm -inverse ${MNIhr2MNIlr} -omat ${DATASET}/${SUBJECT}/mnilr2mnihr.mat
-fi
-MNIlr2MNIhr="${DATASET}/${SUBJECT}/mnilr2mnihr.mat"
-
 # ===================================================================================================================
 # Resulting EZ Area =================================================================================================
 # ===================================================================================================================
 
+# Second STR MNI Lr to MNI Hr Transformation ========================================================================
+echo "Inversing transformations from MNI152 2mm to MNI152 1mm template..."
+if [ ! -f "${DATASET}/${SUBJECT}/mnilr2mnihr.mat" ]; then
+convert_xfm -inverse ${DATASET}/${SUBJECT}/mnihr2mnilr.mat -omat ${DATASET}/${SUBJECT}/mnilr2mnihr.mat
+fi
+MNIlr2MNIhr="${DATASET}/${SUBJECT}/mnilr2mnihr.mat"
+
 # Resulting EZ Area to MNI Hr Transformation ========================================================================
 echo "Running FLIRT registration: resulting ez area to MNI152 1mm template..."
-if [ -f "${DATASET}/${SUBJECT}/pre_bold/pre_bold_preprocessed.ica/filtered_func_data.ica/ez_area.nii.gz" ]; then
+if [ -f "${DATASET}/${SUBJECT}/pre_bold/pre_bold_preprocessed.ica/filtered_func_data.ica/ez_area.nii.gz" ] && \
+[ ! -f "${DATASET}/${SUBJECT}/pre_bold/pre_bold_preprocessed.ica/filtered_func_data.ica/ez_area_hr.nii.gz" ]; then
 flirt   -in ${DATASET}/${SUBJECT}/pre_bold/pre_bold_preprocessed.ica/filtered_func_data.ica/ez_area \
         -ref /home/smsadjadi/fsl/data/standard/MNI152_T1_1mm \
         -applyxfm \
