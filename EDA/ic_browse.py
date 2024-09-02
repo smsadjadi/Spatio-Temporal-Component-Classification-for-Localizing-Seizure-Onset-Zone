@@ -18,12 +18,15 @@ def ic_browse(selected_ic, criterion, affine, show=True):
         ijk_coords.append((selected_ic.shape[0]-idx[0],idx[1]+1,idx[2]+1))
         mni_coords.append(image.coord_transform(idx[0], idx[1], idx[2], affine))
     
-    if show:    
-        print ('max value index:',indices)
-        print ('max value XYZ coordinate:',ijk_coords)
-        print ('max value MNI coordinate:',mni_coords)
+    coords = {"Max_index": indices, "ijk_coords": ijk_coords, "MNI_coords": mni_coords}
+    
+    if show:
+        print('')    
+        print ('criterion indices:',coords["Max_index"])
+        print ('XYZ coordinates:  ',coords["ijk_coords"])
+        print ('MNI coordinates:  ',coords["MNI_coords"])
     
     output_mask = np.zeros_like(selected_ic)
     output_mask[places] = 1
     
-    return indices, output_mask
+    return coords, output_mask

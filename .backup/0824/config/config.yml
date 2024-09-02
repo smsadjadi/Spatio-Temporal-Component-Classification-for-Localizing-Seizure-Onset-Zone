@@ -1,0 +1,9 @@
+# Dataset parameters
+dataset:
+  dir           : 'D:\Academic\Datasets\Epilepsy_rsfMRI_Fallahi'
+  subject_id    : 1
+
+# sICA parameters
+sica:
+  candidate     : 4
+  # criterion   : selected_ic >= selected_ic.max() OR 3.1 OR selected_ic.flatten()[np.argsort(selected_ic.flatten())[-10:]][0]

@@ -4,7 +4,7 @@ import nibabel as nib
 
 
 def data_import(dataset,subject_id,subfolder,data_name):
-
+    
     subjects_list = glob.glob(os.path.join(dataset,'Sub*'))
     dataset_dir = os.path.abspath(subjects_list[subject_id-1])
     nifti_files = [file for file in os.listdir(os.path.join(dataset_dir,subfolder)) if file.endswith('.nii.gz')]
@@ -13,6 +13,7 @@ def data_import(dataset,subject_id,subfolder,data_name):
     selected_paths = []
     data = {col: [] for col in data_name}
     
+    print('')
     print("selected data:")
     for name in data_name:
         try:

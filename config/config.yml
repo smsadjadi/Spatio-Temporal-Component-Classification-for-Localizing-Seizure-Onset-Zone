@@ -1,6 +1,6 @@
 # Dataset parameters
 dataset:
-  dir           : 'D:/Education/Datasets/EpilepsyfMRI'
+  dir           : 'D:\Academic\Datasets\Epilepsy_rsfMRI_Fallahi'
   subject_id    : 1
 
 # sICA parameters
