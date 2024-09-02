@@ -1,3 +1,7 @@
+# ===================================================================================================================
+# Pre-surgical Data =================================================================================================
+# ===================================================================================================================
+
 # Directories =======================================================================================================
 DATASET="/mnt/d/Academic/Datasets/Epilepsy_rsfMRI_Fallahi"
 MNI_TEMPLATE="/home/smsadjadi/fsl/data/standard/MNI152_T1_2mm_brain"
@@ -46,7 +50,7 @@ fi
 FUNC2STR="${DATASET}/${SUBJECT}/func2prestr.mat"
 
 # STR to MNI Transformation and Registration ========================================================================
-echo "Running FLIRT registration: structural brain to MNI152 template..."
+echo "Running FLIRT registration: structural brain to MNI152 template..." # applywarp instead of flirt if nonlinear
 if [ ! -f "${DATASET}/${SUBJECT}/pre_t1/pre_t1_brain_normalized_lr.nii.gz" ]; then
 flirt   -in ${T1_DIR} \
         -ref ${MNI_TEMPLATE} \
@@ -92,7 +96,11 @@ feat $FSF_MODIFIED
 fi
 MELODIC_IC="${DATASET}/${SUBJECT}/pre_bold/pre_bold_preprocessed.ica/filtered_func_data.ica/melodic_IC"
 
-# Second STR to MNI 1mm Transformation and Registration =============================================================
+# ===================================================================================================================
+# Post-surgical sMRI ================================================================================================
+# ===================================================================================================================
+
+# Second STR to MNI Hr Transformation and Registration ==============================================================
 echo "Running FLIRT registration: 2nd structural brain to MNI152 1mm template..."
 if [ ! -f "${DATASET}/${SUBJECT}/post_t1/post_t1_normalized_hr.nii.gz" ]; then
 flirt   -in ${DATASET}/${SUBJECT}/post_t1/post_t1 \
@@ -105,7 +113,7 @@ fi
 POST2MNIhr="${DATASET}/${SUBJECT}/poststr2mnihr.mat"
 POSThr_DIR="${DATASET}/${SUBJECT}/post_t1/post_t1_normalized_hr"
 
-# Second STR to MNI 2mm Transformation and Registration =============================================================
+# Second STR to MNI Lr Transformation and Registration ==============================================================
 echo "Running FLIRT registration: 2nd structural brain to MNI152 2mm template..."
 if [ ! -f "${DATASET}/${SUBJECT}/post_t1/post_t1_normalized_lr.nii.gz" ]; then
 flirt   -in ${DATASET}/${SUBJECT}/post_t1/post_t1_normalized_hr \
@@ -118,12 +126,27 @@ fi
 MNIhr2MNIlr="${DATASET}/${SUBJECT}/mnihr2mnilr.mat"
 POSTlr_DIR="${DATASET}/${SUBJECT}/post_t1/post_t1_normalized_lr"
 
-# MNI Lr to MNI Hr Transformation ===================================================================================
+# Second STR MNI Lr to MNI Hr Transformation ========================================================================
 echo "Inversing transformations from MNI152 2mm to MNI152 1mm template..."
 if [ ! -f "${DATASET}/${SUBJECT}/mnilr2mnihr.mat" ]; then
 convert_xfm -inverse ${MNIhr2MNIlr} -omat ${DATASET}/${SUBJECT}/mnilr2mnihr.mat
 fi
 MNIlr2MNIhr="${DATASET}/${SUBJECT}/mnilr2mnihr.mat"
+
+# ===================================================================================================================
+# Resulting EZ Area =================================================================================================
+# ===================================================================================================================
+
+# Resulting EZ Area to MNI Hr Transformation ========================================================================
+echo "Running FLIRT registration: resulting ez area to MNI152 1mm template..."
+if [ -f "${DATASET}/${SUBJECT}/pre_bold/pre_bold_preprocessed.ica/filtered_func_data.ica/ez_area.nii.gz" ]; then
+flirt   -in ${DATASET}/${SUBJECT}/pre_bold/pre_bold_preprocessed.ica/filtered_func_data.ica/ez_area \
+        -ref /home/smsadjadi/fsl/data/standard/MNI152_T1_1mm \
+        -applyxfm \
+        -init ${MNIlr2MNIhr} \
+        -out ${DATASET}/${SUBJECT}/pre_bold/pre_bold_preprocessed.ica/filtered_func_data.ica/ez_area_hr
+fi
+EZAREAhr="${DATASET}/${SUBJECT}/pre_bold/pre_bold_preprocessed.ica/filtered_func_data.ica/ez_area_hr"
 
 # Finish ============================================================================================================
 # rm -rf "${DATASET}/${SUBJECT}/pre_bold/pre_bold.feat"
