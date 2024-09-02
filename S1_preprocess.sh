@@ -54,22 +54,22 @@ flirt   -in ${T1_DIR} \
         -omat ${DATASET}/${SUBJECT}/prestr2mnilr.mat \
         -dof 12
 fi
-STR2MNI="${DATASET}/${SUBJECT}/prestr2mnilr.mat"
+STR2MNIlr="${DATASET}/${SUBJECT}/prestr2mnilr.mat"
 T1_DIR="${DATASET}/${SUBJECT}/pre_t1/pre_t1_brain_normalized_lr"
 
 # BOLD to MNI Transformation ========================================================================================
 echo "Concatenating transformations..."
 if [ ! -f "${DATASET}/${SUBJECT}/func2mnilr.mat" ]; then
-convert_xfm -concat ${STR2MNI} ${FUNC2STR} -omat ${DATASET}/${SUBJECT}/func2mnilr.mat
+convert_xfm -concat ${STR2MNIlr} ${FUNC2STR} -omat ${DATASET}/${SUBJECT}/func2mnilr.mat
 fi
-FUNC2MNI="${DATASET}/${SUBJECT}/func2mnilr.mat"
+FUNC2MNIlr="${DATASET}/${SUBJECT}/func2mnilr.mat"
 
 # BOLD to MNI Normalization =========================================================================================
 echo "Running FLIRT registration: functional to MNI152 template..."
 if [ ! -f "${DATASET}/${SUBJECT}/pre_bold/pre_bold_preprocessed.nii.gz" ]; then
 flirt   -in ${BOLD_DIR} \
         -ref ${MNI_TEMPLATE} \
-        -applyxfm -init ${FUNC2MNI} \
+        -applyxfm -init ${FUNC2MNIlr} \
         -out ${DATASET}/${SUBJECT}/pre_bold/pre_bold_preprocessed
 fi
 BOLD_DIR="${DATASET}/${SUBJECT}/pre_bold/pre_bold_preprocessed"
@@ -102,8 +102,8 @@ flirt   -in ${DATASET}/${SUBJECT}/post_t1/post_t1 \
         -dof 7 \
         -cost mutualinfo
 fi
-POST2MNI="${DATASET}/${SUBJECT}/poststr2mnihr.mat"
-POST_DIR="${DATASET}/${SUBJECT}/post_t1/post_t1_normalized_hr"
+POST2MNIhr="${DATASET}/${SUBJECT}/poststr2mnihr.mat"
+POSThr_DIR="${DATASET}/${SUBJECT}/post_t1/post_t1_normalized_hr"
 
 # Second STR to MNI 2mm Transformation and Registration =============================================================
 echo "Running FLIRT registration: 2nd structural brain to MNI152 2mm template..."
@@ -115,8 +115,15 @@ flirt   -in ${DATASET}/${SUBJECT}/post_t1/post_t1_normalized_hr \
         -dof 6 \
         -cost mutualinfo
 fi
-POST2MNI2mm="${DATASET}/${SUBJECT}/mnihr2mnilr.mat"
-POST2mm_DIR="${DATASET}/${SUBJECT}/post_t1/post_t1_normalized_lr"
+MNIhr2MNIlr="${DATASET}/${SUBJECT}/mnihr2mnilr.mat"
+POSTlr_DIR="${DATASET}/${SUBJECT}/post_t1/post_t1_normalized_lr"
+
+# MNI Lr to MNI Hr Transformation ===================================================================================
+echo "Inversing transformations from MNI152 2mm to MNI152 1mm template..."
+if [ ! -f "${DATASET}/${SUBJECT}/mnilr2mnihr.mat" ]; then
+convert_xfm -inverse ${MNIhr2MNIlr} -omat ${DATASET}/${SUBJECT}/mnilr2mnihr.mat
+fi
+MNIlr2MNIhr="${DATASET}/${SUBJECT}/mnilr2mnihr.mat"
 
 # Finish ============================================================================================================
 # rm -rf "${DATASET}/${SUBJECT}/pre_bold/pre_bold.feat"
