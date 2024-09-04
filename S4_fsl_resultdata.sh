@@ -14,10 +14,10 @@ echo
 
 # Second STR MNI Lr to MNI Hr Transformation ========================================================================
 echo "Inversing transformations from MNI152 2mm to MNI152 1mm template..."
-if [ ! -f "${DATASET}/${SUBJECT}/mnilr2mnihr.mat" ]; then
-convert_xfm -inverse ${DATASET}/${SUBJECT}/mnihr2mnilr.mat -omat ${DATASET}/${SUBJECT}/mnilr2mnihr.mat
+if [ ! -f "${DATASET}/${SUBJECT}/regmats/mnilr2mnihr.mat" ]; then
+convert_xfm -inverse ${DATASET}/${SUBJECT}/regmats/mnihr2mnilr.mat -omat ${DATASET}/${SUBJECT}/regmats/mnilr2mnihr.mat
 fi
-MNIlr2MNIhr="${DATASET}/${SUBJECT}/mnilr2mnihr.mat"
+MNIlr2MNIhr="${DATASET}/${SUBJECT}/regmats/mnilr2mnihr.mat"
 
 # Resulting EZ Area to MNI Hr Transformation ========================================================================
 echo "Running FLIRT registration: resulting ez area to MNI152 1mm template..."

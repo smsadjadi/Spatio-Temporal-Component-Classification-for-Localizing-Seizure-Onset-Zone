@@ -18,11 +18,11 @@ if [ ! -f "${DATASET}/${SUBJECT}/post_t1/post_t1_normalized_hr.nii.gz" ]; then
 flirt   -in ${DATASET}/${SUBJECT}/post_t1/post_t1 \
         -ref /home/smsadjadi/fsl/data/standard/MNI152_T1_1mm \
         -out ${DATASET}/${SUBJECT}/post_t1/post_t1_normalized_hr \
-        -omat ${DATASET}/${SUBJECT}/poststr2mnihr.mat \
+        -omat ${DATASET}/${SUBJECT}/regmats/poststr2mnihr.mat \
         -dof 7 \
         -cost mutualinfo
 fi
-POST2MNIhr="${DATASET}/${SUBJECT}/poststr2mnihr.mat"
+POST2MNIhr="${DATASET}/${SUBJECT}/regmats/poststr2mnihr.mat"
 POSThr_DIR="${DATASET}/${SUBJECT}/post_t1/post_t1_normalized_hr"
 
 # Second STR to MNI Lr Transformation and Registration ==============================================================
@@ -31,11 +31,11 @@ if [ ! -f "${DATASET}/${SUBJECT}/post_t1/post_t1_normalized_lr.nii.gz" ]; then
 flirt   -in ${DATASET}/${SUBJECT}/post_t1/post_t1_normalized_hr \
         -ref /home/smsadjadi/fsl/data/standard/MNI152_T1_2mm \
         -out ${DATASET}/${SUBJECT}/post_t1/post_t1_normalized_lr \
-        -omat ${DATASET}/${SUBJECT}/mnihr2mnilr.mat \
+        -omat ${DATASET}/${SUBJECT}/regmats/mnihr2mnilr.mat \
         -dof 6 \
         -cost mutualinfo
 fi
-MNIhr2MNIlr="${DATASET}/${SUBJECT}/mnihr2mnilr.mat"
+MNIhr2MNIlr="${DATASET}/${SUBJECT}/regmats/mnihr2mnilr.mat"
 POSTlr_DIR="${DATASET}/${SUBJECT}/post_t1/post_t1_normalized_lr"
 
 # Finish ============================================================================================================

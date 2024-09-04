@@ -4,7 +4,8 @@
 
 # Directories =======================================================================================================
 DATASET="/mnt/d/Academic/Datasets/Epilepsy_rsfMRI_Fallahi"
-MNI_TEMPLATE="/home/smsadjadi/fsl/data/standard/MNI152_T1_2mm_brain"
+MNI_LR="/home/smsadjadi/fsl/data/standard/MNI152_T1_2mm_brain"
+MNI_HR="/home/smsadjadi/fsl/data/standard/MNI152_T1_1mm"
 DESIGN="${DATASET}/Archive/Design"
 if [ ! -d "$DESIGN/modified" ]; then
 mkdir $DESIGN/modified
@@ -41,38 +42,51 @@ T1_DIR="${DATASET}/${SUBJECT}/pre_t1/pre_t1_brain"
 
 # BOLD to STR Transformation ========================================================================================
 echo "Running FLIRT registration: functional to structural brain image..."
-if [ ! -f "${DATASET}/${SUBJECT}/func2prestr.mat" ]; then
+if [ ! -f "${DATASET}/${SUBJECT}/regmats/func2prestr.mat" ]; then
 flirt   -in ${BOLD_MEAN} \
         -ref ${T1_DIR} \
-        -omat ${DATASET}/${SUBJECT}/func2prestr.mat \
+        -omat ${DATASET}/${SUBJECT}/regmats/func2prestr.mat \
         -dof 12 -searchrx -180 180 -searchry -180 180 -searchrz -180 180
 fi
-FUNC2STR="${DATASET}/${SUBJECT}/func2prestr.mat"
+FUNC2STR="${DATASET}/${SUBJECT}/regmats/func2prestr.mat"
 
-# STR to MNI Transformation and Registration ========================================================================
+# STR to MNI Lr Transformation and Registration =====================================================================
 echo "Running FLIRT registration: structural brain to MNI152 template..." # applywarp instead of flirt if nonlinear
 if [ ! -f "${DATASET}/${SUBJECT}/pre_t1/pre_t1_brain_normalized_lr.nii.gz" ]; then
 flirt   -in ${T1_DIR} \
-        -ref ${MNI_TEMPLATE} \
+        -ref ${MNI_LR} \
         -out ${T1_DIR}_normalized \
-        -omat ${DATASET}/${SUBJECT}/prestr2mnilr.mat \
+        -omat ${DATASET}/${SUBJECT}/regmats/prestr2mnilr.mat \
         -dof 12
 fi
-STR2MNIlr="${DATASET}/${SUBJECT}/prestr2mnilr.mat"
+STR2MNIlr="${DATASET}/${SUBJECT}/regmats/prestr2mnilr.mat"
 T1_DIR="${DATASET}/${SUBJECT}/pre_t1/pre_t1_brain_normalized_lr"
+
+# STR to MNI Hr Transformation and Registration =====================================================================
+echo "Running FLIRT registration: structural to MNI152 1mm template..."
+if [ ! -f "${DATASET}/${SUBJECT}/pre_t1/pre_t1_normalized_hr.nii.gz" ]; then
+flirt   -in ${DATASET}/${SUBJECT}/pre_t1/pre_t1 \
+        -ref ${MNI_HR} \
+        -out ${DATASET}/${SUBJECT}/pre_t1/pre_t1_normalized_hr \
+        -omat ${DATASET}/${SUBJECT}/regmats/prestr2mnihr.mat \
+        -dof 7 \
+        -cost mutualinfo
+fi
+PRE2MNIhr="${DATASET}/${SUBJECT}/regmats/prestr2mnihr.mat"
+PREhr_DIR="${DATASET}/${SUBJECT}/pre_t1/pre_t1_normalized_hr"
 
 # BOLD to MNI Transformation ========================================================================================
 echo "Concatenating transformations..."
-if [ ! -f "${DATASET}/${SUBJECT}/func2mnilr.mat" ]; then
-convert_xfm -concat ${STR2MNIlr} ${FUNC2STR} -omat ${DATASET}/${SUBJECT}/func2mnilr.mat
+if [ ! -f "${DATASET}/${SUBJECT}/regmats/func2mnilr.mat" ]; then
+convert_xfm -concat ${STR2MNIlr} ${FUNC2STR} -omat ${DATASET}/${SUBJECT}/regmats/func2mnilr.mat
 fi
-FUNC2MNIlr="${DATASET}/${SUBJECT}/func2mnilr.mat"
+FUNC2MNIlr="${DATASET}/${SUBJECT}/regmats/func2mnilr.mat"
 
 # BOLD to MNI Normalization =========================================================================================
 echo "Running FLIRT registration: functional to MNI152 template..."
 if [ ! -f "${DATASET}/${SUBJECT}/pre_bold/pre_bold_preprocessed.nii.gz" ]; then
 flirt   -in ${BOLD_DIR} \
-        -ref ${MNI_TEMPLATE} \
+        -ref ${MNI_LR} \
         -applyxfm -init ${FUNC2MNIlr} \
         -out ${DATASET}/${SUBJECT}/pre_bold/pre_bold_preprocessed
 fi
