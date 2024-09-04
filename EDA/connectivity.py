@@ -33,3 +33,6 @@ def voxel_network_strength(fmri_data, mask, voxel_index):
     network_strength = round(sum(network)/num_voxels,3)
     return network_strength
 
+def ic_central_energy(fmri_data, voxel_index):
+    central_energy = np.sum(fmri_data[voxel_index] ** 2)
+    return central_energy

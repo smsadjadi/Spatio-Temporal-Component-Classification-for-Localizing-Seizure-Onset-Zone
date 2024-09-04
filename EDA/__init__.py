@@ -9,3 +9,4 @@ from .topological_measures import *
 from .mean_fmri_in_neighborhood import *
 from .max_power_frequency import *
 from .outside_inside_ratio import *
+from .tICA_on_sIC import *
