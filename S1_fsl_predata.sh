@@ -7,9 +7,7 @@ DATASET="/mnt/d/Academic/Datasets/Epilepsy_rsfMRI_Fallahi"
 MNI_LR="/home/smsadjadi/fsl/data/standard/MNI152_T1_2mm_brain"
 MNI_HR="/home/smsadjadi/fsl/data/standard/MNI152_T1_1mm"
 DESIGN="${DATASET}/Archive/Design"
-if [ ! -d "$DESIGN/modified" ]; then
-mkdir $DESIGN/modified
-fi
+if [ ! -d "$DESIGN/modified" ]; then mkdir $DESIGN/modified; fi
 
 SUBJECTS=("Sub001" "Sub002" "Sub003" "Sub004" "Sub005" "Sub006" "Sub007" "Sub008" "Sub009" "Sub010")
 for SUBJECT in "${SUBJECTS[@]}"; do
@@ -20,6 +18,7 @@ echo "----- Analysis of ${SUBJECT} -----"
 echo
 BOLD_DIR="${DATASET}/${SUBJECT}/pre_bold/pre_bold"
 T1_DIR="${DATASET}/${SUBJECT}/pre_t1/pre_t1"
+if [ ! -d "${DATASET}/${SUBJECT}/regmats" ]; then mkdir ${DATASET}/${SUBJECT}/regmats; fi
 
 # BOLD Preprocessing ================================================================================================
 echo "Running initial FEAT preprocessing..."
@@ -36,7 +35,7 @@ BOLD_MEAN="${DATASET}/${SUBJECT}/pre_bold/pre_bold.feat/mean_func"
 # STR Brain Extraction ==============================================================================================
 echo "Running BET brain extraction on structural data..."
 if [ ! -f "${DATASET}/${SUBJECT}/pre_t1/pre_t1_brain.nii.gz" ]; then
-bet ${T1_DIR} ${T1_DIR}_brain -f 0.5 -g 0
+bet ${T1_DIR} ${T1_DIR}_brain -f 0.5 -g 0 -m
 fi
 T1_DIR="${DATASET}/${SUBJECT}/pre_t1/pre_t1_brain"
 
@@ -55,12 +54,24 @@ echo "Running FLIRT registration: structural brain to MNI152 template..." # appl
 if [ ! -f "${DATASET}/${SUBJECT}/pre_t1/pre_t1_brain_normalized_lr.nii.gz" ]; then
 flirt   -in ${T1_DIR} \
         -ref ${MNI_LR} \
-        -out ${T1_DIR}_normalized \
+        -out ${T1_DIR}_normalized_lr \
         -omat ${DATASET}/${SUBJECT}/regmats/prestr2mnilr.mat \
         -dof 12
 fi
 STR2MNIlr="${DATASET}/${SUBJECT}/regmats/prestr2mnilr.mat"
 T1_DIR="${DATASET}/${SUBJECT}/pre_t1/pre_t1_brain_normalized_lr"
+
+# STR Mask to MNI Lr Transformation and Registration =====================================================================
+echo "Running FLIRT registration: structural brain mask to MNI152 template..."
+if [ ! -f "${DATASET}/${SUBJECT}/pre_t1/pre_t1_brain_mask_normalized_lr.nii.gz" ]; then
+flirt   -in ${DATASET}/${SUBJECT}/pre_t1/pre_t1_brain_mask \
+        -ref ${MNI_LR} \
+        -out ${DATASET}/${SUBJECT}/pre_t1/pre_t1_brain_mask_normalized_lr \
+        -omat ${DATASET}/${SUBJECT}/regmats/premask2mnilr.mat \
+        -dof 7 \
+        -cost mutualinfo
+fi
+MASK2MNIlr="${DATASET}/${SUBJECT}/regmats/premask2mnilr.mat"
 
 # STR to MNI Hr Transformation and Registration =====================================================================
 echo "Running FLIRT registration: structural to MNI152 1mm template..."
