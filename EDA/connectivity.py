@@ -28,7 +28,7 @@ def voxel_network_strength(fmri_data, mask, voxel_index):
     num_voxels = time_series.shape[1]
     network = np.zeros(num_voxels)
     for i in range(num_voxels):
-        network[i] = np.corrcoef(time_series[:, i], voxel_time_series)[0, 1]
+        network[i] = np.abs(np.corrcoef(time_series[:, i], voxel_time_series)[0, 1])
     network = np.sort(network)[::-1]
     network_strength = round(sum(network)/num_voxels,3)
     return network_strength

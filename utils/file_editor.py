@@ -40,3 +40,15 @@ def merge_csv_files(directory_path, output_file):
         if subject_id == 1: header=True
         else: header=False
         df.to_csv(os.path.join(directory_path,output_file), mode='a', index=False, header=header)
+
+def rename_column_in_csv(folder_path, old_column_name, new_column_name):
+    for file_name in os.listdir(folder_path):
+        if file_name.endswith('.csv'):
+            file_path = os.path.join(folder_path, file_name)
+            df = pd.read_csv(file_path)
+            if old_column_name in df.columns:  
+                df.rename(columns={old_column_name: new_column_name}, inplace=True)
+                df.to_csv(file_path, index=False)
+                print(f"Processed and renamed column in file: {file_name}")
+            else:
+                print(f"Column '{old_column_name}' not found in {file_name}")
