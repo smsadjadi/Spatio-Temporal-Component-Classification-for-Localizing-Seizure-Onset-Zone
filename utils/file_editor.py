@@ -52,3 +52,15 @@ def rename_column_in_csv(folder_path, old_column_name, new_column_name):
                 print(f"Processed and renamed column in file: {file_name}")
             else:
                 print(f"Column '{old_column_name}' not found in {file_name}")
+
+def remove_column_from_csv(folder_path, column_name):
+    for file_name in os.listdir(folder_path):
+        if file_name.endswith('.csv'):
+            file_path = os.path.join(folder_path, file_name)
+            df = pd.read_csv(file_path)
+            if column_name in df.columns:  
+                df = df.drop(column_name, axis=1)
+                df.to_csv(file_path, index=False)
+                print(f"Removed column from file: {file_name}")
+            else:
+                print(f"Column '{column_name}' not found in {file_name}")
