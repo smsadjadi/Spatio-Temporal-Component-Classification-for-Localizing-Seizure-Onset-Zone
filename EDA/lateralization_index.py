@@ -36,7 +36,7 @@ def lateralization_index(IC_matrix):
     # Filter out components with symmetricity greater than the cut-off
     if correlation <= cutoff:
         # Calculate Lateralization Index (LI)
-        LI = (np.sum(left_voxels) - np.sum(right_voxels)) / (np.sum(left_voxels) + np.sum(right_voxels))
+        LI = np.float(1 - np.abs(correlation))
         return {"Lateralization Index": round(LI,3), "Symmetricity": round(correlation,3)}
     else:
         return {"Lateralization Index": None, "Symmetricity": round(correlation,3)}

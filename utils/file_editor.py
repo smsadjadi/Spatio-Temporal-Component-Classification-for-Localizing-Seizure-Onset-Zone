@@ -35,7 +35,8 @@ def rename_files(directory, old_suffix, new_suffix):
 def merge_csv_files(directory_path, output_file):
     for subject_id in range(10):
         subject_id +=1
-        file_path = os.path.join(directory_path,f"Sub{subject_id}_sIC_Features.csv")
+        if subject_id < 10: file_path = f'{directory_path}/Sub0{subject_id}_sIC_Features.csv'
+        else: file_path = f'{directory_path}/Sub{subject_id}_sIC_Features.csv'
         df = pd.read_csv(file_path)
         if subject_id == 1: header=True
         else: header=False
