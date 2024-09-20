@@ -1,4 +1,4 @@
-Subject ID,sIC Number,sIC Center,R_o/i,Max Power Frequency,Lateralization Index,Lateralization Strength,Lateralization Side,Centeral Network,Clustering Coefficient,Characteristic Path Length,Connectivity Strength,Connectivity Diversity,Central Energy,Max tIC Non-Gaussianity
+Subject ID,sIC Number,sIC Center,R_o/i,Max Power Frequency,Lateralization Index,Lateralization Strength,Lateralization Side,Central Network,Clustering Coefficient,Characteristic Path Length,Connectivity Strength,Connectivity Diversity,Central Energy,Max tIC Non-Gaussianity
 2,1,"(-2.0, -50.0, 60.0)",0.746,0.039,0.464,0.384,Left,0.751,0.68,0.964,0.643,0.021,22723058873.82872,315.00312553797903
 2,2,"(-58.0, 10.0, -4.0)",0.142,0.029,0.425,0.281,Right,0.644,0.555,0.974,0.528,0.06,29681855096.31264,315.00312373886305
 2,3,"(0.0, -80.0, 12.0)",0.074,0.039,0.213,0.556,Left,0.545,0.367,0.976,0.342,0.066,39900603450.76835,315.00313158716887
@@ -15,7 +15,7 @@ Subject ID,sIC Number,sIC Center,R_o/i,Max Power Frequency,Lateralization Index,
 2,14,"(-40.0, -58.0, 54.0)",0.115,0.039,0.27,0.077,Right,0.325,0.17,0.967,0.136,0.088,45534397941.6006,315.003132740907
 2,15,"(16.0, -36.0, 66.0)",0.148,0.039,0.219,0.446,Left,0.43,0.238,0.963,0.199,0.109,42494931040.33013,315.0031331982313
 2,16,"(30.0, 68.0, -4.0)",0.212,0.039,0.257,0.474,Right,0.408,0.292,0.962,0.252,0.093,46503826306.70207,315.00313304197005
-2,17,"(62.0, -8.0, 22.0)",0.018,0.025,0.31,0.401,Right,0.56,0.475,0.982,0.456,0.049,32458319850.630302,315.00313372991485
+2,17,"(62.0, -8.0, 22.0)",0.018,0.025,0.51,0.411,Right,0.56,0.475,0.982,0.456,0.049,32458319850.630302,315.00313372991485
 2,18,"(-66.0, -34.0, -4.0)",0.059,0.014,0.607,0.898,Left,0.307,0.271,0.962,0.231,0.076,39163829782.24989,315.00313178991144
 2,19,"(-50.0, -74.0, 12.0)",0.027,0.031,0.436,0.542,Right,0.489,0.381,0.971,0.352,0.088,41260426768.02161,315.0031321132779
 2,20,"(28.0, 42.0, 48.0)",0.346,0.039,0.474,0.682,Right,0.433,0.347,0.971,0.317,0.073,6510435818.314973,315.00312851672334

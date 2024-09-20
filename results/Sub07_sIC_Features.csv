@@ -1,4 +1,4 @@
-Subject ID,sIC Number,sIC Center,R_o/i,Max Power Frequency,Lateralization Index,Lateralization Strength,Lateralization Side,Centeral Network,Clustering Coefficient,Characteristic Path Length,Connectivity Strength,Connectivity Diversity,Central Energy,Max tIC Non-Gaussianity
+Subject ID,sIC Number,sIC Center,R_o/i,Max Power Frequency,Lateralization Index,Lateralization Strength,Lateralization Side,Central Network,Clustering Coefficient,Characteristic Path Length,Connectivity Strength,Connectivity Diversity,Central Energy,Max tIC Non-Gaussianity
 7,1,"(-32.0, 66.0, 2.0)",1.309,0.014,0.395,0.115,Right,,0.502,0.969,0.47,0.044,47136354498.69009,315.0031173573571
 7,2,"(-32.0, -82.0, -30.0)",0.754,0.016,0.57,0.318,Left,0.738,0.68,0.98,0.659,0.018,23559470822.431293,315.00307689861125
 7,3,"(30.0, 16.0, 66.0)",0.225,0.019,0.354,0.846,Right,0.511,0.453,0.974,0.426,0.044,207811835551.59387,315.0031254735312
