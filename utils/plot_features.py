@@ -1,10 +1,13 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
+import os
 
-def histplot_feature(df, subset, column_name):
+def histplot_feature(df, subset, column_name, save_path=None):
     
-    if column_name not in df.columns: raise ValueError(f"Column '{column_name}' not found in DataFrame.")
+    if column_name not in df.columns: 
+        raise ValueError(f"Column '{column_name}' not found in DataFrame.")
+    
     all_values = df[column_name]
     subset_values = subset[column_name]
     
@@ -23,13 +26,21 @@ def histplot_feature(df, subset, column_name):
     plt.ylabel('Frequency')
     plt.title(f'Histogram of {column_name}')
     plt.legend(prop={'size': 7})
+    
+    if save_path:
+        # Ensure directory exists
+        os.makedirs(os.path.dirname(save_path), exist_ok=True)
+        plt.savefig(save_path, format='svg')
+        
     plt.show()
 
-def boxplot_features(df, subset_df, column_names, norm=True):
+def boxplot_features(df, subset_df, column_names, norm=True, save_path=None):
     
     if norm:
-        means = df.mean() ; stds = df.std()
-        df = (df-means)/stds ; subset_df=(subset_df-means)/stds
+        means = df.mean()
+        stds = df.std()
+        df = (df - means) / stds
+        subset_df = (subset_df - means) / stds
     
     df.columns = df.columns.str.strip() 
     subset_df.columns = subset_df.columns.str.strip()
@@ -68,4 +79,10 @@ def boxplot_features(df, subset_df, column_names, norm=True):
     plt.title('IC Features with Epileptic ICs Highlighted')
 
     plt.tight_layout()
+    
+    if save_path:
+        # Ensure directory exists
+        os.makedirs(os.path.dirname(save_path), exist_ok=True)
+        plt.savefig(save_path, format='svg')
+    
     plt.show()
